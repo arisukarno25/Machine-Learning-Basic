@@ -1,0 +1,30 @@
+import pandas as pd
+df = pd.read_csv('diabetes.csv')
+df.head()
+
+#mengecek apakah terdapat nilai-nilai yang hilang pada dataset serta apakah ada atribut yang bukan berisi bilangan numerik
+df.info()
+
+# memisahkan atribut pada dataset dan menyimpannya pada sebuah variabel
+X = df[df.columns[:8]]
+
+# memisahkan label pada dataset dan menyimpannya pada sebuah variabel
+y = df['Outcome']
+
+from sklearn.preprocessing import StandardScaler
+# standarisasi nilai-nilai dari dataset agar berada pada skala yang sama
+scaler = StandardScaler()
+scaler.fit(X)
+X = scaler.transform(X)
+
+#memisahkan data untuk training dan testing menggunakan fungsi .train_test_split().
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.33, random_state=42)
+
+#membuat objek Support Vector Classifier, menampungnya pada variabel clf dan memanggil fungsi fit untuk melatih model
+from sklearn.svm import SVC
+clf = SVC()
+clf.fit(X_train, y_train)
+#melihat hasil akurasi model
+clf.score(X_test, y_test)
