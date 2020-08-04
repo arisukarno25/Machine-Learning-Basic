@@ -1,0 +1,6 @@
+## Latihan Konversi Data ke Dataframe dengan Pandas 
+import pandas as pd
+import os
+#os.listdir('sample_data')
+df = pd.read_csv('sample_data/california_housing_train.csv')
+df.head()
