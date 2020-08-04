@@ -1,0 +1,28 @@
+from sklearn.tree import DecisionTreeClassifier
+import pandas as pd
+from sklearn.datasets import load_iris
+iris = pd.read_csv('Iris.csv')
+iris.head()
+
+iris.drop('Id',axis=1,inplace=True)
+X = iris[['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm' ]]
+y = iris['Species']
+
+# membuat model Decision Tree
+tree_model = DecisionTreeClassifier() 
+# melakukan pelatihan model terhadap data
+tree_model.fit(X, y)
+# tree_model.predict([[SepalLength, SepalWidth, PetalLength, PetalWidth]])
+tree_model.predict([[6.2, 3.4, 5.4, 2.3]])
+print(X.columns)
+
+#melihat visualisasi dari decision tree
+from sklearn.tree import export_graphviz
+export_graphviz(
+    tree_model,
+    out_file = "iris_tree.dot",
+    feature_names = ['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm'],
+    class_names = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica' ],
+    rounded= True,
+    filled =True
+)
