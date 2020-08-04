@@ -1,0 +1,49 @@
+source data : https://www.kaggle.com/vivinbarath/simple-linear-regression-for-salary-data
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+#mengubah berkas csv dari dataset menjadi dataframe Pandas
+data = pd.read_csv('Salary_Data.csv')
+
+#melihat apakah terdapat missing value pada dataset dengan fungsi .info()
+data.info()
+
+#menampilkan 5 data 
+data.head()
+
+import numpy as np
+#pisahkan antara atribut dan label yang ingin diprediksi.
+X = data['YearsExperience']
+y = data['Salary']
+#atribut tersebut perlu diubah bentuknya agar bisa diterima oleh model dari library SKLearn
+X = X[:,np.newaxis]
+
+#buat objek support vector regression(SVR)
+from sklearn.svm import SVR
+model  = SVR(C=1000, gamma=0.05, kernel='rbf')
+model.fit(X,y)
+
+#memvisualisasikan bagaimana model SVR kita menyesuaikan terhadap pola yang terdapat pada data menggunakan library matplotlib
+import matplotlib.pyplot as plt
+plt.scatter(X, y)
+plt.plot(X, model.predict(X))
+
+#Hasil visualisasi menunjukkan bahwa model yang kita kembangkan, belum mampu menyesuaikan terhadap pola pada data dengan baik. 
+#kita akan meningkatkan performa model kita dengan menggunakan grid search.
+from sklearn.model_selection import GridSearchCV
+
+svrgs_parameters = {
+    'kernel': ['rbf'],
+    'C':     [150000,200000,250000],
+    'gamma': [0.004,0.0045,0.005]
+}
+clf = SVR()
+
+#svm.SVR()
+svr_cv = GridSearchCV(clf, svrgs_parameters, cv=8)
+svr_cv.fit(X,y)
+print("SVR GridSearch score: "+str(svr_cv.best_score_))
+print("SVR GridSearch params: ")
+print(svr_cv.best_params_)
