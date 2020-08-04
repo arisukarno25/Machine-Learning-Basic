@@ -1,0 +1,29 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+df = pd.read_csv('Social_Network_Ads.csv')
+df.head()
+df.info()
+
+#meghilangkan kolom "USER ID"
+data = df.drop(columns=['User ID'])
+data = pd.get_dummies(data)
+data
+
+#pisahkan antara atribut dan label
+predictions = ['Age' , 'EstimatedSalary' , 'Gender_Female' , 'Gender_Male']
+X = data[predictions]
+y = data['Purchased'] 
+
+# membagi data menjadi train set dan test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+
+#membuat sebuah objek logistic regression
+#Setelah model dibuat, kita bisa melatih model kita dengan train set menggunakan fungsi fit()
+from sklearn import linear_model
+model = linear_model.LogisticRegression()
+model.fit(X_train, y_train)
+
+#melihat hasil akurasi model
+model.score(X_test, y_test)
